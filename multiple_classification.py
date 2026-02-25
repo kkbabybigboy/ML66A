@@ -59,55 +59,47 @@ if (selected == 'BMI'):
 
     st.title('BMI Classification')
 
-    person_gender = st.selectbox('Gender', gender_map)
+    person_gender = st.selectbox('Gender', ['Male', 'Female'])
 
-    height = st.number_input('Height (cm)', min_value=0.0)
+    person_height = st.number_input('Height (cm)', min_value=0, value=170)
 
-    weight = st.number_input('Weight (kg)', min_value=0.0)
+    person_weight = st.number_input('Weight (kg)', min_value=0, value=60)
 
-    BMI_prediction = ''
+ 
+    bmi_labels = {
+
+        0: 'Extremely Weak',
+
+        1: 'Weak',
+
+        2: 'Normal',
+
+        3: 'Overweight',
+
+        4: 'Obesity',
+
+        5: 'Extreme Obesity'
+
+    }
 
     if st.button('Predict'):
 
-        prediction = BMI_model.predict([
+        gender_val = 0 if person_gender == 'Male' else 1
 
-            [
+        prediction = bmi_model.predict([[
 
-                gender_map[person_gender],
+            gender_val, 
 
-                float(height),
+            float(person_height), 
 
-                float(weight)
+            float(person_weight)
 
-            ]
+        ]])
 
-        ])
+        result_label = bmi_labels.get(int(prediction[0]), "Unknown")
 
-        if prediction[0] == 0:
-
-            BMI_prediction = 'Extremely Weak'
-
-        elif prediction[0] == 1:
-
-            BMI_prediction = 'Weak'
-
-        elif prediction[0] == 2:
-
-            BMI_prediction = 'Normal'
-
-        elif prediction[0] == 3:
-
-            BMI_prediction = 'Overweight'
-
-        elif prediction[0] == 4:
-
-            BMI_prediction = 'Obesity'
-
-        elif prediction[0] == 5:
-
-            BMI_prediction = 'Extreme Obesity'
-
-    st.success(BMI_prediction)
+        st.success(f'ผลการทำนายคือ: **{result_label}**')
+ 
  
     
 if(selected == 'Loan'):
@@ -183,6 +175,7 @@ if(selected == 'Riding'):
           
 
     st.success(Riding_prediction)
+
 
 
 
